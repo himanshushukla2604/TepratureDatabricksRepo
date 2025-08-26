@@ -1,0 +1,12 @@
+# AWS Credentials
+AWS_ACCESS_KEY_ID=your_access_key_here
+AWS_SECRET_ACCESS_KEY=your_secret_key_here
+AWS_DEFAULT_REGION=us-east-1
+
+# S3 Configuration
+S3_BUCKET_NAME=my-iot-data-bucket-2025
+S3_PREFIX=iot-data/
+
+# IoT Configuration
+BATCH_SIZE=100
+IOT_INTERVAL_SECONDS=5
