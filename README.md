@@ -119,4 +119,64 @@ The pipeline will:
 - Batch management and threshold monitoring
 - Statistics tracking and graceful shutdown
 
+# IoT Device MTTR & KPI Pipeline - README
+
+This notebook processes IoT device telemetry data stored in Delta format on AWS S3, computes key metrics, and writes results to a gold table for analytics and visualization.
+
+### Cell 1: MTTR Calculation
+- Loads device telemetry from the silver Delta table.
+- Casts columns to appropriate types.
+- Detects status changes (healthy ↔ faulty) per device.
+- Segments data into continuous runs of healthy/faulty states.
+- Calculates Mean Time to Repair (MTTR) per device by measuring the duration of each faulty run until recovery.
+
+### Cell 2: Battery Metrics
+- Computes average battery level per device.
+- Calculates the percentage of time each device's battery was below 30%.
+
+### Cell 3: Fault Frequency
+- Aggregates the number of faults per device per week.
+
+### Cell 4: KPI Aggregation
+- Joins MTTR, battery, and fault frequency metrics into a unified DataFrame.
+- Aligns weekly fault counts with device and event date.
+
+### Cell 5: Output & Visualization
+- Displays the final KPI DataFrame.
+- Writes results to the gold Delta table partitioned by event date.
+- Provides explanations for recommended visualizations:
+  1. MTTR per device
+  2. Average battery level per device
+  3. Low battery percentage per device
+  4. Fault frequency per device per week
+
+# IoT Device Uptime & Reliability Metrics Notebook -gold
+
+This notebook calculates key reliability metrics for IoT devices using telemetry data stored in Delta format on AWS S3.
+
+## Logic Overview
+
+- **Load Data**: Reads device telemetry from the silver Delta table (`path`).
+- **Event Boundaries**: Identifies the first and last event per device per day to estimate the expected number of readings.
+- **Uptime Calculation**: Computes the percentage of actual readings versus expected readings for each device and day.
+- **Fault Analysis**:
+  - Counts the number of faults per device per day.
+  - Calculates Mean Time Between Failures (MTBF) by measuring the average time between consecutive faults for each device.
+- **Result Aggregation**: Joins uptime, fault count, and MTBF into a single DataFrame.
+- **Output**: Displays the final metrics and writes them to the gold Delta table (`dest s3 path`), partitioned by event date.
+
+## Output Columns
+
+- `device_id`: Unique identifier for each device.
+- `event_date`: Date of the telemetry events.
+- `expected_readings`: Estimated number of expected readings per device per day.
+- `actual_count`: Actual number of readings received.
+- `uptime_percent`: Percentage of uptime based on readings.
+- `mtbf_seconds`: Mean time between failures (in seconds).
+- `faultCount`: Number of faults detected per device per day.
+
+## Usage
+
+Run this notebook to generate daily reliability KPIs for all devices. The results are stored in the gold table for further analytics and visualization.
+
 
