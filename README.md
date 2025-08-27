@@ -97,6 +97,10 @@ The pipeline will:
 - `requirements.txt`: Python dependencies for AWS S3
 - `env_example.txt`: Environment variables template
 - `README.md`: This file
+- `bronze_layer.ipynb`: consume from s3 store it in compressed fromat in raw layer s3
+- `silver_layer.ipynb`: read data from raw and filter it and store it for futer analysis
+- `gold_layer.ipynb`: perfored some analytics on silver layer data add some visualizations
+- `device_health_index.ipynb`: this will contain all the visualization that we have performed regarding device health
 
 ## Classes in main.py
 
@@ -115,30 +119,4 @@ The pipeline will:
 - Batch management and threshold monitoring
 - Statistics tracking and graceful shutdown
 
-## Monitoring
 
-The pipeline provides detailed logging:
-- Data generation status
-- Batch processing and S3 upload confirmations
-- Error handling and connection status
-- Performance metrics (total records, batches)
-
-## Testing Without Infrastructure
-
-The pipeline includes mock implementations for testing:
-- **Mock S3 Client**: Logs uploads instead of writing to S3
-
-This allows you to test the data generation and batching logic without setting up AWS.
-
-## Troubleshooting
-
-### Common Issues
-1. **Import Errors**: Ensure you're in the correct directory and virtual environment
-2. **S3 Permissions**: Verify AWS credentials and bucket permissions
-3. **Environment Variables**: Ensure `.env` file is properly configured
-
-### Debug Mode
-Set logging level to DEBUG for more detailed information:
-```python
-logging.basicConfig(level=logging.DEBUG)
-```
